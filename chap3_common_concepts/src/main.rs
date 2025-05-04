@@ -116,5 +116,4 @@ fn main() {
 
     let element = a[index];
     println!("The value of element at index {index} is : {element}");
-
 }
