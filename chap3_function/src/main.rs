@@ -13,6 +13,15 @@ fn main() {
         x + 1
     };
     println!("The value of y is: {y}"); // y = 6
+
+    let x = five();
+    println!("The value of x is: {x}");
+
+    let y = plus_one(10);
+    println!("The value of y is: {y}");
+
+    let z = plus_two(20);
+    println!("The value of z is {z}");
 }
 
 fn another_function(x :i32){
@@ -21,4 +30,12 @@ fn another_function(x :i32){
 
 fn print_labeled_measurement(x :i32, label :char) {
     println!("The value of x is: {x}{label}")
+}
+
+fn five() -> i32 {
+    5 // do not use semicolon here because we not use return
+}
+
+fn plus_one(x :i32) -> i32 {
+    x + 1 // remove this semicolon to return this value
 }
