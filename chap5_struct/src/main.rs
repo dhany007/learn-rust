@@ -64,6 +64,12 @@ fn main() {
     println!("x = {}, y = {}, z = {}", x, y, z);
     let Point(r, g, b) = origin;
     println!("r = {}, g = {}, b = {}", r, g, b);
+
+    println!("Unit-Like Structs Without Any Fields");
+    // unit-like structs is structs that don’t have any fields
+    // Unit-like structs can be useful when you need to implement a trait on some type
+    // but don’t have any data that you want to store in the type itself
+    let subject = AlwaysEqual;
 }
 
 struct User {
@@ -84,3 +90,7 @@ fn build_user(email: String, username: String) -> User {
 
 struct Color(i32, i32, i32); // RGB
 struct Point(i32, i32, i32); // xyz
+
+// we use the struct keyword, the name we want, and then a semicolon.
+// No need for curly brackets or parentheses!
+struct AlwaysEqual;
