@@ -5,7 +5,7 @@ fn main() {
 
     println!("Defining and Instantiating Structs");
 
-    let user1 = User{
+    let mut user1 = User{
         active: true,
         username: String::from("some.username123"),
         email: String::from("someone@example.com"),
@@ -13,6 +13,10 @@ fn main() {
     };
     println!("email = {}", user1.email); // someone@example.com
 
+    // If the instance is mutable,
+    // we can change a value by using the dot notation and assigning into a particular field
+    user1.email = String::from("new.email@example.com");
+    println!("new email = {}", user1.email); // new.email@example.com
 }
 
 struct User {
