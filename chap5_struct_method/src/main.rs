@@ -32,8 +32,15 @@ fn main() {
     println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2)); // true
     println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3)); // false
 
+    println!("Associated Functions");
+    // All functions defined within an impl block are called associated functions
+    // because they’re associated with the type named after the impl.
+    // like String::from("")
+    let sq1 = Rectangle::square(30);
+    println!("{:?}", sq1); // Rectangle { width: 30, height: 30 }
 }
 
+#[derive(Debug)]
 struct Rectangle {
     width: u32,
     height: u32,
@@ -55,5 +62,14 @@ impl Rectangle {
     // methods with more parameters
     fn can_hold(&self, other: &Rectangle) -> bool {
         self.width > other.width && self.height > other.height
+    }
+
+    // associated functions
+    // like String::from("")
+    fn square(size: u32) -> Self {
+        Self {
+            width: size,
+            height: size,
+        }
     }
 }
