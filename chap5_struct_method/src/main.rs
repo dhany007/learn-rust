@@ -13,6 +13,10 @@ fn main() {
     };
     let result = rect1.area();
     println!("The area of the rectangle is {} square pixels", result);
+
+    if rect1.width() {
+        println!("The rectangle has a nonzero width; it is {}", rect1.width);
+    }
 }
 
 struct Rectangle {
@@ -21,7 +25,15 @@ struct Rectangle {
 }
 
 impl Rectangle {
+    // We chose &self here : we don’t want to take ownership,
+    // and we just want to read the data in the struct, not write to it
     fn area(&self) -> u32 {
         self.width * self.height
+    }
+
+    // we can choose to give a method the same name as one of the struct’s fields.
+    // For example, we can define a method on Rectangle that is also named width:
+    fn width(&self) -> bool {
+        self.width > 0
     }
 }
