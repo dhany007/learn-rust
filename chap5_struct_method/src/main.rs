@@ -73,3 +73,10 @@ impl Rectangle {
         }
     }
 }
+
+// multiple impl block
+impl Rectangle {
+    fn area2(&self) -> u32 {
+        return self.width * self.height;
+    }
+}
