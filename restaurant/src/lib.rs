@@ -6,8 +6,8 @@
  */
 
 mod front_of_house {
-    mod hosting {
-        fn add_to_waitlist() {}
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
 
         fn seat_at_table() {}
     }
@@ -19,4 +19,14 @@ mod front_of_house {
 
         fn take_payment() {}
     }
+}
+
+// function is part of our library crate’s public API,
+// so we mark it with the pub keyword
+pub fn eat_at_restaurant() {
+    // Absolute path
+    crate::front_of_house::hosting::add_to_waitlist();
+
+    // relative path
+    front_of_house::hosting::add_to_waitlist();
 }
