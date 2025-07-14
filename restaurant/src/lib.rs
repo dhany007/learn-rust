@@ -24,11 +24,19 @@ mod front_of_house {
 // function is part of our library crate’s public API,
 // so we mark it with the pub keyword
 pub fn eat_at_restaurant() {
-    // Absolute path
-    crate::front_of_house::hosting::add_to_waitlist();
+    // order a breakfast in the summer with Rye toast
+    let mut meal = back_of_house::Breakfast::summer("Rye");
 
-    // relative path
-    front_of_house::hosting::add_to_waitlist();
+    // change our mind about what bread we'd like
+    meal.toast = String::from("Wheat"); // we can because toast is public in struct
+    println!("I'd like {} toast please", meal.toast);
+
+    // below error because seasonal_fruit not public
+    // meal.seasonal_fruit = String::from("blueberries");
+
+    // accessing public enum in back_of_house
+    let order1 = back_of_house::Appetizer::Salad;
+    let order2 = back_of_house::Appetizer::Soup;
 }
 
 fn deliver_order() {} // parent module
@@ -37,6 +45,27 @@ mod back_of_house {
     fn fix_incorrect_order() {
         cook_order();
         super::deliver_order() // Using super allows us to reference an item that we know is in the parent module
+    }
+
+    // public struct
+    pub struct Breakfast {
+        pub toast: String,
+        seasonal_fruit: String,
+    }
+
+    impl Breakfast {
+        pub fn summer(toast: &str) -> Breakfast {
+            Breakfast {
+                toast: String::from(toast),
+                seasonal_fruit: String::from("peaches"),
+            }
+        }
+    }
+
+    // for enum only need pub before enum
+    pub enum Appetizer {
+        Soup,
+        Salad
     }
 
     fn cook_order() {}
