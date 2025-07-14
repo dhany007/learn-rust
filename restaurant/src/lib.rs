@@ -30,3 +30,14 @@ pub fn eat_at_restaurant() {
     // relative path
     front_of_house::hosting::add_to_waitlist();
 }
+
+fn deliver_order() {} // parent module
+
+mod back_of_house {
+    fn fix_incorrect_order() {
+        cook_order();
+        super::deliver_order() // Using super allows us to reference an item that we know is in the parent module
+    }
+
+    fn cook_order() {}
+}
