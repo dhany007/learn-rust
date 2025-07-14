@@ -21,22 +21,10 @@ mod front_of_house {
     }
 }
 
-// function is part of our library crate’s public API,
-// so we mark it with the pub keyword
+pub use crate::front_of_house::hosting;
+
 pub fn eat_at_restaurant() {
-    // order a breakfast in the summer with Rye toast
-    let mut meal = back_of_house::Breakfast::summer("Rye");
-
-    // change our mind about what bread we'd like
-    meal.toast = String::from("Wheat"); // we can because toast is public in struct
-    println!("I'd like {} toast please", meal.toast);
-
-    // below error because seasonal_fruit not public
-    // meal.seasonal_fruit = String::from("blueberries");
-
-    // accessing public enum in back_of_house
-    let order1 = back_of_house::Appetizer::Salad;
-    let order2 = back_of_house::Appetizer::Soup;
+    hosting::add_to_waitlist();
 }
 
 fn deliver_order() {} // parent module
@@ -70,3 +58,10 @@ mod back_of_house {
 
     fn cook_order() {}
 }
+
+// use list
+use std::{camp::Ordering, io};
+
+// global operator
+use std::collections::*;
+
