@@ -1,30 +1,10 @@
 use std::fs::File;
-use std::io::ErrorKind;
+use std::io::{ErrorKind, self, Read};
+use std::fs;
 
 fn main() {
     println!("Error Handling");
 
-    // let greeting_file_result = File::open("hello.txt");
-    // let greeting_file = match greeting_file_result {
-    //     Ok(file) => file,
-    //     Err(error) => match error.kind() {
-    //         ErrorKind::NotFound => match File::create("hello.txt") { // if error not found, we create file
-    //             Ok(fc) => fc,
-    //             Err(e) => panic!("Problem creating the file: {:?}", e),
-    //         },
-    //         _ => {
-    //             panic!("Problem opening the file: {:?}", error)
-    //         }
-    //     },
-    // };
-
-    // unwrap
-    //  { code: 2, kind: NotFound, message: "No such file or directory" }
-    let greeting_file2 = File::open("hello.txt").unwrap();
-
-    // expect
-    let greeting_file3 = File::open("hello.txt")
-        .expect("hello.txt should be included in this project");
 }
 
 /*
@@ -40,12 +20,105 @@ enum Result<T, E> {
 // using unwrap_or_else
 fn alternative() {
     let greeting_file = File::open("hello.txt").unwrap_or_else(|error| {
-       if error.kind() == ErrorKind::NotFound {
-           File::create("hello.txt").unwrap_or_else(|error| {
-               panic!("Problem creating the file: {:?}", error);
-           })
-       } else {
-           panic!("Problem opening the file: {:?}", error);
-       }
+        if error.kind() == ErrorKind::NotFound {
+            File::create("hello.txt").unwrap_or_else(|error| {
+                panic!("Problem creating the file: {:?}", error);
+            })
+        } else {
+            panic!("Problem opening the file: {:?}", error);
+        }
     });
+}
+
+fn recoverable() {
+    let greeting_file_result = File::open("hello.txt");
+    let greeting_file = match greeting_file_result {
+        Ok(file) => file,
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => match File::create("hello.txt") { // if error not found, we create file
+                Ok(fc) => fc,
+                Err(e) => panic!("Problem creating the file: {:?}", e),
+            },
+            _ => {
+                panic!("Problem opening the file: {:?}", error)
+            }
+        },
+    };
+}
+
+fn unwrap() {
+    //  { code: 2, kind: NotFound, message: "No such file or directory" }
+    let greeting_file2 = File::open("hello.txt").unwrap();
+}
+
+fn expect() {
+    // hello.txt should be included in this project:
+    // Os { code: 2, kind: NotFound, message: "No such file or directory" }
+    let greeting_file3 = File::open("hello.txt")
+        .expect("hello.txt should be included in this project");
+}
+
+/*
+    propagating can return the error to the calling code so that it can decide what to do
+ */
+
+// Result<T, E>
+// Result<String, io::Error>
+// the generic parameter T has been filled in with the concrete type String
+// and the generic type E has been filled in with the concrete type io::Error.
+fn read_username_from_file() -> Result<String, io::Error> {
+    let username_file_result = File::open("hello.txt");
+
+    let mut username_file = match username_file_result {
+        Ok(file) => file,
+        Err(e) => return Err(e),
+    };
+
+    let mut username = String::new();
+
+    match username_file.read_to_string(&mut username) {
+        Ok(_) => Ok(username),
+        Err(e) => Err(e),
+    }
+}
+
+// A Shortcut for Propagating Errors: the ? Operator
+fn read_username_from_file2() -> Result<String, io::Error> {
+    let username_file_result = File::open("hello.txt")?;
+
+    let mut username = String::new();
+
+    username_file.read_to_string(&mut username)?;
+
+    Ok(username)
+}
+
+// chaining method calls immediately after the ?
+fn read_username_from_file3() -> Result<String, io::Error> {
+    let mut username = String::new();
+
+    File::open("hello.txt")?.read_to_string(&mut username)?;
+
+    Ok(username)
+}
+
+
+// using fs
+/*
+    fs::read_to_string function that opens the file,
+    creates a new String,
+    reads the contents of the file,
+    puts the contents into that String,
+    and returns it
+ */
+fn read_username_from_file4() -> Result<String, io::Error> {
+    fs::read_to_string("hello.txt")
+}
+
+/*
+    we’re only allowed to use the ? operator in a function
+    that returns Result, Option, or another type that implements FromResidual.
+ */
+fn last_char_of_first_line(text: &str) -> Option<char> {
+    text.lines().next()?.chars().last()
 }
