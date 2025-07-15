@@ -4,19 +4,27 @@ use std::io::ErrorKind;
 fn main() {
     println!("Error Handling");
 
-    let greeting_file_result = File::open("hello.txt");
-    let greeting_file = match greeting_file_result {
-        Ok(file) => file,
-        Err(error) => match error.kind() {
-            ErrorKind::NotFound => match File::create("hello.txt") { // if error not found, we create file
-                Ok(fc) => fc,
-                Err(e) => panic!("Problem creating the file: {:?}", e),
-            },
-            _ => {
-                panic!("Problem opening the file: {:?}", error)
-            }
-        },
-    };
+    // let greeting_file_result = File::open("hello.txt");
+    // let greeting_file = match greeting_file_result {
+    //     Ok(file) => file,
+    //     Err(error) => match error.kind() {
+    //         ErrorKind::NotFound => match File::create("hello.txt") { // if error not found, we create file
+    //             Ok(fc) => fc,
+    //             Err(e) => panic!("Problem creating the file: {:?}", e),
+    //         },
+    //         _ => {
+    //             panic!("Problem opening the file: {:?}", error)
+    //         }
+    //     },
+    // };
+
+    // unwrap
+    //  { code: 2, kind: NotFound, message: "No such file or directory" }
+    let greeting_file2 = File::open("hello.txt").unwrap();
+
+    // expect
+    let greeting_file3 = File::open("hello.txt")
+        .expect("hello.txt should be included in this project");
 }
 
 /*
