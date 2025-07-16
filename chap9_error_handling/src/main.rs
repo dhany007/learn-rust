@@ -122,3 +122,30 @@ fn read_username_from_file4() -> Result<String, io::Error> {
 fn last_char_of_first_line(text: &str) -> Option<char> {
     text.lines().next()?.chars().last()
 }
+
+
+/*
+    To panic! or Not to panic!
+    - When code panics, there’s no way to recover.
+    - When you choose to return a Result value, you give the calling code options
+    - Returning Result is a good default choice when you’re defining a function that might fail.
+    -
+ */
+
+pub struct Guess {
+    value: i32,
+}
+
+impl Guess {
+    pub fn new(value: i32) -> Guess {
+        if value < 1 || value > 100 {
+            panic!("Guess value must be between 1 and 100, got {}.", value);
+        }
+
+        Guess { value }
+    }
+
+    pub fn value(&self) -> i32 {
+        self.value
+    }
+}
