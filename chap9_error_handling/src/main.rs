@@ -132,6 +132,12 @@ fn last_char_of_first_line(text: &str) -> Option<char> {
     -
  */
 
+
+
+/*
+The panic! macro signals that your program is in a state it can’t handle and lets you tell the process to stop instead of trying to proceed with invalid or incorrect values
+The Result enum uses Rust’s type system to indicate that operations might fail in a way that your code could recover from
+ */
 pub struct Guess {
     value: i32,
 }
