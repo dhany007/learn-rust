@@ -11,6 +11,12 @@ fn main() {
 
     let integer = Point { x: 1, y: 2 };
     let float = Point { x: 1.1, y: 2.2 };
+
+    // don't work because mix integer and float, should be same struct T
+    let wont_work = Point { x: 1, y: 2.2 };
+
+    // work because have generic T and U
+    let integer_and_float = Point { x: 1, y: 2.2 };
 }
 
 fn largest<T>(list: &[T]) -> &T {
@@ -26,7 +32,25 @@ fn largest<T>(list: &[T]) -> &T {
 }
 
 // generic in struct definition
+// type of T is must be same
 struct Point<T> {
     x: T,
     y: T,
+}
+
+// can different because have T and U
+struct Point2<T, U> {
+    x: T,
+    y: U,
+}
+
+// generic in enum definition
+enum Option<T> {
+    Some(T),
+    None,
+}
+
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
 }
