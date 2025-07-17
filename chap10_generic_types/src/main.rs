@@ -8,6 +8,9 @@ fn main() {
     let char_list = vec!['y', 'm', 'a', 'q'];
     let result = largest(&char_list);
     println!("The largest char is {}", result);
+
+    let integer = Point { x: 1, y: 2 };
+    let float = Point { x: 1.1, y: 2.2 };
 }
 
 fn largest<T>(list: &[T]) -> &T {
@@ -20,4 +23,10 @@ fn largest<T>(list: &[T]) -> &T {
     }
 
     largest
+}
+
+// generic in struct definition
+struct Point<T> {
+    x: T,
+    y: T,
 }
