@@ -1,17 +1,23 @@
 use std::env;
-use std::fs;
+use std::process;
+
+use minigrep::Config;
 
 fn main() {
     // get argument ex: cargo run -- needle haystack
     let args: Vec<String> = env::args().collect();
 
-    let query = &args[1];
-    let filepath = &args[2];
+    // that unwrap_or_else will pass the inner value of the Err, which in this case is the static string "not enough arguments"
+    let config = Config::build(&args).unwrap_or_else(|err| {
+        eprintln!("problem parsing arguments: {}", err);
+        process::exit(1);
+    });
 
-    println!("Searching for {}", query);
-    println!("In file {}", filepath);
+    println!("Searching for {}", config.query);
+    println!("In file {}", config.file_path);
 
-    let contents = fs::read_to_string(filepath)
-        .expect("Something went wrong reading the file");
-    println!("With text:\n{}", contents);
+    if let Err(e) = minigrep::run(config) {
+        println!("application error: {e}");
+        process::exit(1);
+    }
 }
