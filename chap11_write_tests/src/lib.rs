@@ -102,4 +102,25 @@ mod tests {
             Err(String::from("three plus four does not equal seven"))
         }
     }
+
+
+    #[ignore]
+    fn ignore_test() {
+        // code that takes an hour to run
+    }
 }
+
+// Running Tests in Consecutively
+// cargo test -- --test-threads=1
+
+// Showing Function Output
+// cargo test -- --show-output
+
+// Running Single Tests
+// cargo test greater_than_100_should_panic
+
+// Filtering to Run Multiple Tests
+// cargo test add => This command ran all tests with add in the name
+
+// Ignoring Some Tests Unless Specifically Requested
+// cargo test -- --ignored => using #[ignore] in mod tests
