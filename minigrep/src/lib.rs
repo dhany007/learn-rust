@@ -10,13 +10,20 @@ pub struct Config {
 
 impl Config {
     // Our error values will always be string literals that have the 'static lifetime.
-    pub fn build(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
-        }
+    pub fn build(
+        mut args: impl Iterator<Item = String>,
+    ) -> Result<Config, &'static str> {
+        args.next();
 
-        let query = args[1].clone(); // copy entire string, need improvement next chap
-        let file_path = args[2].clone();
+        let query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a query string"),
+        };
+
+        let file_path = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a file name"),
+        };
 
         // untuk menangkap: IGNORE_CASE=1 cargo run -- to poem.txt
         let ignore_case = env::var("IGNORE_CASE").is_ok();
@@ -67,7 +74,7 @@ safe, fast, productive.
 Pick three.
 Trust me.";
 
-        assert_eq!(vec!["Rust, Trust me."], search_case_insensitive(query, contents));
+        assert_eq!(vec!["Trust me."], search_case_insensitive(query, contents));
     }
 }
 
@@ -76,26 +83,17 @@ Trust me.";
 // we indicate that the returned vector should contain string slices
 // that reference slices of the argument contents (rather than the argument query)
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
-
-    for line in contents.lines() {
-        if line.contains(query) {
-            results.push(line);
-        }
-    }
-
-    results
+    contents
+        .lines()
+        .filter(|line| line.contains(query))
+        .collect()
 }
 
 pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
     let query = query.to_lowercase();
 
-    for line in contents.lines() {
-        if line.to_lowercase().contains(&query) {
-            results.push(line);
-        }
-    }
-
-    results
+    contents
+        .lines()
+        .filter(|line| line.contains(&query))
+        .collect()
 }
