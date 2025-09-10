@@ -1,64 +1,64 @@
 use std::time::{Duration, Instant};
-// use std::pin::{Pin, pin};
+use std::pin::{Pin, pin};
 use std::thread;
 use trpl::Either;
 
 fn main() {
-    // println!("Working with any number of futures!");
-    //
-    // trpl::run(async {
-    //     let (tx, mut rx) = trpl::channel();
-    //
-    //     let tx1 = tx.clone();
-    //     let tx1_fut = pin!(async move {
-    //         let vals = vec![
-    //             String::from("hi"),
-    //             String::from("there"),
-    //             String::from("from"),
-    //             String::from("the"),
-    //             String::from("future"),
-    //         ];
-    //
-    //         for val in vals {
-    //             tx1.send(val).unwrap();
-    //             trpl::sleep(Duration::from_millis(500)).await;
-    //         }
-    //     });
-    //
-    //     let rx_fut = pin!(async {
-    //         while let Some(value) = rx.recv().await {
-    //             println!("received '{value}'");
-    //         }
-    //     });
-    //
-    //     let tx_fut = pin!(async move {
-    //         let vals = vec![
-    //             String::from("more"),
-    //             String::from("messages"),
-    //             String::from("for"),
-    //             String::from("you"),
-    //         ];
-    //
-    //         for val in vals {
-    //             tx.send(val).unwrap();
-    //             trpl::sleep(Duration::from_millis(1500)).await;
-    //         }
-    //     });
-    //
-    //     let futures: Vec<Pin<&mut dyn Future<Output = ()>>> = vec![tx1_fut, rx_fut, tx_fut];
-    //
-    //     trpl::join_all(futures).await;
-    // });
-    //
-    // //  pass in multiple future types and produces a tuple of those types
-    // trpl::run(async {
-    //     let a = async { 1u32 }; // implements Future<Output = u32>
-    //     let b = async {"Hello"}; // implements Future<Output = &str>
-    //     let c = async { true }; // implements Future<Output = bool>
-    //
-    //     let (a_result, b_result, c_result) = trpl::join!(a, b, c);
-    //     println!("{a_result}\n{b_result}\n{c_result}");
-    // });
+    println!("Working with any number of futures!");
+
+    trpl::run(async {
+        let (tx, mut rx) = trpl::channel();
+
+        let tx1 = tx.clone();
+        let tx1_fut = pin!(async move {
+            let vals = vec![
+                String::from("hi"),
+                String::from("there"),
+                String::from("from"),
+                String::from("the"),
+                String::from("future"),
+            ];
+
+            for val in vals {
+                tx1.send(val).unwrap();
+                trpl::sleep(Duration::from_millis(500)).await;
+            }
+        });
+
+        let rx_fut = pin!(async {
+            while let Some(value) = rx.recv().await {
+                println!("received '{value}'");
+            }
+        });
+
+        let tx_fut = pin!(async move {
+            let vals = vec![
+                String::from("more"),
+                String::from("messages"),
+                String::from("for"),
+                String::from("you"),
+            ];
+
+            for val in vals {
+                tx.send(val).unwrap();
+                trpl::sleep(Duration::from_millis(1500)).await;
+            }
+        });
+
+        let futures: Vec<Pin<&mut dyn Future<Output = ()>>> = vec![tx1_fut, rx_fut, tx_fut];
+
+        trpl::join_all(futures).await;
+    });
+
+    //  pass in multiple future types and produces a tuple of those types
+    trpl::run(async {
+        let a = async { 1u32 }; // implements Future<Output = u32>
+        let b = async {"Hello"}; // implements Future<Output = &str>
+        let c = async { true }; // implements Future<Output = bool>
+
+        let (a_result, b_result, c_result) = trpl::join!(a, b, c);
+        println!("{a_result}\n{b_result}\n{c_result}");
+    });
 
     println!("Racing futures");
     trpl::run(async {
