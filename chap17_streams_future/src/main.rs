@@ -58,6 +58,7 @@ fn get_messages() -> impl Stream<Item = String> {
             let time_to_sleep = if index % 2 == 0 {100} else {300};
             trpl::sleep(Duration::from_millis(time_to_sleep)).await;
 
+
             if let Err(send_error) = tx.send(format!("Message: '{message}")) {
                 eprintln!("could send message '{message}': {send_error}");
                 break;
